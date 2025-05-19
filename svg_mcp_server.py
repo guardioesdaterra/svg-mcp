@@ -102,7 +102,8 @@ async def svg_prompt_examples(ctx: Context, category: str = "all") -> Dict[str, 
     
     Args:
         ctx: The MCP context
-        category: Category of SVG examples ('all', 'shapes', 'icons', 'illustrations', 'charts')
+        category: Category of SVG examples ('all', 'shapes', 'icons', 'illustrations', 'charts', 
+                  'ui_elements', 'logos', 'abstract_patterns', 'data_visualizations')
         
     Returns:
         A dictionary with example prompts in the specified category
@@ -114,26 +115,67 @@ async def svg_prompt_examples(ctx: Context, category: str = "all") -> Dict[str, 
             "Create an SVG of a red circle with blue border, 3px width, on a transparent background",
             "Generate SVG code for a rounded rectangle with gradient from blue to purple",
             "Create an SVG with three overlapping transparent circles in red, green, and blue",
-            "Generate an SVG star shape with 5 points and yellow fill"
+            "Generate an SVG star shape with 5 points and yellow fill",
+            "SVG of an ellipse with a dashed stroke and orange fill",
+            "Create a polygon with 7 sides, green fill and black stroke"
         ],
         "icons": [
             "Create an SVG icon of a simple house with a chimney",
             "Generate an SVG hamburger menu icon with three lines",
             "Create an SVG search icon with a magnifying glass",
-            "Generate an SVG settings gear icon with 8 teeth"
+            "Generate an SVG settings gear icon with 8 teeth",
+            "SVG user profile icon, minimalist style",
+            "Generate a download arrow icon, flat design",
+            "Create a shopping cart icon with a small badge",
+            "SVG notification bell icon with a subtle animation hint",
+            "Generate a simple folder icon in blue tones",
+            "Create an SVG checkmark icon, bold and green"
         ],
         "illustrations": [
             "Create a simple SVG landscape with mountains, a sun, and trees",
             "Generate an SVG cityscape with buildings of different heights",
             "Create an SVG of a sailing boat on waves",
-            "Generate a simple SVG face with basic features"
+            "Generate a simple SVG face with basic features",
+            "SVG illustration of a coffee cup with steam, retro style",
+            "Create a whimsical illustration of a cat playing with yarn",
+            "Generate an SVG for a stack of books with one open"
         ],
-        "charts": [
+        "charts": [ # This can be deprecated or merged into data_visualizations
             "Create a simple SVG bar chart with 4 bars in different colors",
             "Generate an SVG pie chart divided into 3 sections",
             "Create an SVG line graph showing an upward trend",
             "Generate a simple SVG scatter plot with 5 points"
+        ],
+        # --- BEGIN NEW CATEGORIES AND EXAMPLES ---
+        "ui_elements": [
+            "Generate an SVG for a sleek, modern button with a slight gradient",
+            "Create an SVG toggle switch in the 'on' state, cyberpunk style",
+            "SVG for a progress bar at 75% completion, minimalist",
+            "Generate a set of 3 radio buttons, one selected, simple style",
+            "Create an SVG slider control with a circular handle"
+        ],
+        "logos": [
+            "Generate a minimalist SVG logo for a tech startup named 'Nova'",
+            "Create an abstract geometric logo with a sense of motion, using blue and green",
+            "SVG logo for a coffee shop, vintage style, with a coffee bean element",
+            "Generate a text-based logo for 'EcoWorld' with a leaf integrated into the text",
+            "Create a corporate-style shield logo with the letter 'S' in the center"
+        ],
+        "abstract_patterns": [
+            "Generate an SVG seamless pattern of intertwined circles, monochrome",
+            "Create an abstract SVG background with flowing organic shapes, nature palette",
+            "SVG of a repeating geometric pattern with triangles and hexagons, art deco style",
+            "Generate a dynamic abstract pattern with glitch art effects",
+            "Create a simple wave pattern SVG, suitable for a website footer"
+        ],
+        "data_visualizations": [
+            "Generate an SVG for a donut chart with 4 segments and percentage labels",
+            "Create a horizontal bar graph comparing three products, corporate style",
+            "SVG for a simple flowchart with 3 steps and connecting arrows",
+            "Generate a radial progress indicator for a fitness app",
+            "Create an SVG representation of a network graph with 5 nodes and connections"
         ]
+        # --- END NEW CATEGORIES AND EXAMPLES ---
     }
     
     if category == "all":
@@ -310,7 +352,12 @@ async def generate_svg_from_prompt(ctx: Context, prompt: str) -> Dict[str, Any]:
         "nature": ["nature", "organic", "floral", "plant", "tree", "leaf", "flower", "water"],
         "corporate": ["corporate", "professional", "business", "formal", "clean", "modern"],
         "fantasy": ["fantasy", "magical", "mythical", "medieval", "dragon", "fairy", "wizard"],
-        "artdeco": ["art deco", "artdeco", "gatsby", "roaring twenties", "geometric patterns", "symmetry", "streamlined"]
+        "artdeco": ["art deco", "artdeco", "gatsby", "roaring twenties", "geometric patterns", "symmetry", "streamlined"],
+        # --- BEGIN NEW STYLES KEYWORDS ---
+        "steampunk": ["steampunk", "victorian", "cogs", "gears", "industrial", "brass", "copper", "steam-powered"],
+        "flatdesign": ["flat design", "flat", "2d", "simple color", "no gradient", "long shadow"], # minimalist can be similar but flat has its own aesthetic
+        "glitchart": ["glitch", "glitchy", "datamosh", "data mosh", "corrupted", "digital noise", "distortion", "static"]
+        # --- END NEW STYLES KEYWORDS ---
     }
     
     color_palettes = {
@@ -330,6 +377,14 @@ async def generate_svg_from_prompt(ctx: Context, prompt: str) -> Dict[str, Any]:
                    "background": "#240046", "text": "#e0aaff"},
         "artdeco": {"primary": "#DAA520", "secondary": "#000000", "accent": "#C0C0C0", 
                    "background": "#F5F5DC", "text": "#2E2E2E"},
+        # --- BEGIN NEW STYLE PALETTES ---
+        "steampunk": {"primary": "#B87333", "secondary": "#5E2605", "accent": "#CD7F32", # Copper, Dark Brown, Bronze
+                     "background": "#F5DEB3", "text": "#3B2F2F"}, # Wheat, Dark Brown text
+        "flatdesign": {"primary": "#3498db", "secondary": "#2ecc71", "accent": "#e74c3c", # Blue, Green, Red
+                      "background": "#ecf0f1", "text": "#2c3e50"}, # Light Gray BG, Dark Blue text
+        "glitchart": {"primary": "#FF00FF", "secondary": "#00FFFF", "accent": "#FFFF00", # Magenta, Cyan, Yellow
+                     "background": "#1A1A1A", "text": "#FFFFFF"}, # Dark BG, White text
+        # --- END NEW STYLE PALETTES ---
         "general": {"primary": "#0077b6", "secondary": "#48cae4", "accent": "#fb8500", 
                    "background": "#caf0f8", "text": "#03045e"}
     }
@@ -347,6 +402,11 @@ async def generate_svg_from_prompt(ctx: Context, prompt: str) -> Dict[str, Any]:
         "corporate": 0,
         "fantasy": 0,
         "artdeco": 0,
+        # --- BEGIN NEW STYLES INDICATORS ---
+        "steampunk": 0,
+        "flatdesign": 0,
+        "glitchart": 0,
+        # --- END NEW STYLES INDICATORS ---
         "general": 0
     }
     
@@ -410,6 +470,26 @@ async def generate_svg_from_prompt(ctx: Context, prompt: str) -> Dict[str, Any]:
     if "symmetric" in prompt_lower or "ornate geometric" in prompt_lower:
         style_indicators["artdeco"] += 1
     
+    # Steampunk context clues
+    if any(term in prompt_lower for term in ["steampunk", "victorian", "cogs", "gears", "industrial era", "steam powered"]):
+        style_indicators["steampunk"] += 2
+    if ("brass" in prompt_lower or "copper" in prompt_lower or "bronze" in prompt_lower) and "mechanism" in prompt_lower:
+        style_indicators["steampunk"] += 1
+        
+    # Flat Design context clues
+    if any(term in prompt_lower for term in ["flat design", "flat style", "2d simple", "no shadows", "material design basic"]): # material can sometimes mean flat
+        style_indicators["flatdesign"] += 2
+    if "long shadow" in prompt_lower: # A specific flat design trend
+        style_indicators["flatdesign"] += 1
+    if "minimal" in prompt_lower and "solid color" in prompt_lower:
+        style_indicators["flatdesign"] +=1
+
+    # Glitch Art context clues
+    if any(term in prompt_lower for term in ["glitch effect", "datamosh", "data corruption", "digital noise", "pixel sorting", "screen tear"]):
+        style_indicators["glitchart"] += 2
+    if ("distorted" in prompt_lower or "corrupted" in prompt_lower) and ("digital" in prompt_lower or "signal" in prompt_lower):
+        style_indicators["glitchart"] += 1
+    
     # Determine the dominant style from our enhanced analysis
     # If we have inconclusive results, fall back to "general"
     if max(style_indicators.values()) > 0:
@@ -443,6 +523,14 @@ async def generate_svg_from_prompt(ctx: Context, prompt: str) -> Dict[str, Any]:
         # Tie-breaking for Art Deco
         elif "artdeco" in tied_styles and any(term in prompt_lower for term in ["geometric", "gold", "symmetry", "1920s", "gatsby", "streamline"]):
             dominant_style = "artdeco"
+        # --- BEGIN TIE-BREAKING FOR NEW STYLES ---
+        elif "steampunk" in tied_styles and any(term in prompt_lower for term in ["gear", "cog", "victorian", "industrial", "brass"]):
+            dominant_style = "steampunk"
+        elif "flatdesign" in tied_styles and any(term in prompt_lower for term in ["flat", "2d", "simple icon", "no gradient"]):
+            dominant_style = "flatdesign"
+        elif "glitchart" in tied_styles and any(term in prompt_lower for term in ["glitchy", "corrupt", "noise", "distort"]):
+            dominant_style = "glitchart"
+        # --- END TIE-BREAKING FOR NEW STYLES ---
     
     # Set the color palette based on the dominant style
     palette = color_palettes[dominant_style]
@@ -480,7 +568,13 @@ async def generate_svg_from_prompt(ctx: Context, prompt: str) -> Dict[str, Any]:
         "landscape": True if any(x in prompt_lower for x in ["landscape", "mountain", "nature", "scene"]) else False,
         "animal": True if any(x in prompt_lower for x in ["animal", "creature", "beast", "dog", "cat", "bird"]) else False,
         "abstract": True if any(x in prompt_lower for x in ["abstract", "pattern", "design", "random"]) else False,
-        "gear": True if any(x in prompt_lower for x in ["gear", "cog", "cogwheel", "mechanism"]) else False
+        "gear": True if any(x in prompt_lower for x in ["gear", "cog", "cogwheel", "mechanism"]) else False,
+        # --- BEGIN NEW COMMON OBJECTS ---
+        "arrow": True if any(x in prompt_lower for x in ["arrow", "pointer", "direction", "indicator", "cursor"]) else False,
+        "cloud": True if any(x in prompt_lower for x in ["cloud", "sky", "weather", "cumulus", "fluffy cloud"]) else False,
+        "heart": True if any(x in prompt_lower for x in ["heart", "love", "valentine", "romance"]) else False,
+        "star": True if any(x in prompt_lower for x in ["star", "celestial", "rating", "sparkle", "five-pointed star"]) else False
+        # --- END NEW COMMON OBJECTS ---
     }
     
     # Define SVG defs section with reusable components
@@ -778,6 +872,82 @@ async def generate_svg_from_prompt(ctx: Context, prompt: str) -> Dict[str, Any]:
              <path d="{" ".join(current_path)}" fill="{palette['primary']}" stroke="{palette['secondary']}" stroke-width="1.5" fill-rule="evenodd"/>
         </g>''')
     
+    # --- BEGIN SVG GENERATION FOR NEW OBJECTS ---
+    elif common_objects["arrow"]:
+        arrow_length = min(svg_width, svg_height) * 0.6
+        arrow_head_size = arrow_length * 0.25
+        stroke_w = max(2, arrow_length * 0.05)
+        svg_parts.append(f'''
+        <!-- Arrow -->
+        <g transform="translate({center_x - arrow_length / 2}, {center_y})" fill="{palette['primary']}" stroke="{palette['secondary']}" stroke-width="{stroke_w}">
+            <line x1="0" y1="0" x2="{arrow_length - arrow_head_size}" y2="0" />
+            <polygon points="{arrow_length - arrow_head_size},-{arrow_head_size*0.7} {arrow_length},0 {arrow_length - arrow_head_size},{arrow_head_size*0.7}" />
+        </g>''')
+
+    elif common_objects["cloud"]:
+        cloud_w = min(svg_width, svg_height) * 0.5
+        cloud_h = cloud_w * 0.6
+        # Simple cloud made of overlapping circles
+        svg_parts.append(f'''
+        <!-- Cloud -->
+        <g transform="translate({center_x - cloud_w/2}, {center_y - cloud_h/2})" fill="{palette['primary']}" opacity="{0.8 if dominant_style != 'flatdesign' else 1.0}">
+            <circle cx="{cloud_w*0.3}" cy="{cloud_h*0.6}" r="{cloud_w*0.25}" />
+            <circle cx="{cloud_w*0.5}" cy="{cloud_h*0.4}" r="{cloud_w*0.3}" />
+            <circle cx="{cloud_w*0.7}" cy="{cloud_h*0.7}" r="{cloud_w*0.28}" />
+            <rect x="{cloud_w*0.2}" y="{cloud_h*0.5}" width="{cloud_w*0.6}" height="{cloud_h*0.4}" rx="5"/>
+        </g>''')
+        if dominant_style == "nature":
+             svg_parts.append(f'<path d="M {center_x - cloud_w*0.2} {center_y + cloud_h*0.3} Q {center_x} {center_y + cloud_h*0.4} {center_x + cloud_w*0.2} {center_y + cloud_h*0.3}" stroke="{palette['secondary']}" stroke-width="2" fill="none" opacity="0.5"/>')
+
+    elif common_objects["heart"]:
+        heart_size = min(svg_width, svg_height) * 0.4
+        # Standard heart path, scaled
+        # Path data for a heart: M0,0 C0,-10 -10,-10 -10,0 C-10,10 0,10 0,20 C0,10 10,10 10,0 C10,-10 0,-10 0,0 Z
+        # Scaled: M cx,cy+s*k1 C cx,cy-s*k2 cx-s*k3,cy-s*k2 cx-s*k3,cy+s*k1 C cx-s*k3,cy+s*k2 cx,cy+s*k2 cx,cy+s*k4 ...
+        # Simpler path:
+        svg_parts.append(f'''
+        <!-- Heart -->
+        <g transform="translate({center_x}, {center_y - heart_size*0.1})">
+             <path d="M0,{-heart_size*0.4}
+                      A{heart_size*0.2},{heart_size*0.2} 0 0,1 {heart_size*0.2},{-heart_size*0.6}
+                      A{heart_size*0.2},{heart_size*0.2} 0 0,1 {heart_size*0.4},{-heart_size*0.4}
+                      L0,{heart_size*0.4}
+                      L{-heart_size*0.4},{-heart_size*0.4}
+                      A{heart_size*0.2},{heart_size*0.2} 0 0,1 {-heart_size*0.2},{-heart_size*0.6}
+                      A{heart_size*0.2},{heart_size*0.2} 0 0,1 0,{-heart_size*0.4} Z"
+                   fill="{palette['primary']}" stroke="{palette['secondary']}" stroke-width="1.5"/>
+        </g>''')
+        if dominant_style == "retro":
+             svg_parts.append(f'<path transform="translate({center_x + heart_size*0.05}, {center_y - heart_size*0.05})" d="M0,{-heart_size*0.4} A{heart_size*0.2},{heart_size*0.2} 0 0,1 {heart_size*0.2},{-heart_size*0.6} A{heart_size*0.2},{heart_size*0.2} 0 0,1 {heart_size*0.4},{-heart_size*0.4} L0,{heart_size*0.4} L{-heart_size*0.4},{-heart_size*0.4} A{heart_size*0.2},{heart_size*0.2} 0 0,1 {-heart_size*0.2},{-heart_size*0.6} A{heart_size*0.2},{heart_size*0.2} 0 0,1 0,{-heart_size*0.4} Z" fill="{palette['accent']}" opacity="0.3"/>')
+
+    elif common_objects["star"]:
+        num_points = 5
+        if "points" in prompt_lower or "pointed star" in prompt_lower:
+            star_match = re.search(r'(\d+)\s*(?:points|pointed star)\', prompt_lower)
+            if star_match:
+                try: parsed_points = int(star_match.group(1)); num_points = max(3, min(12, parsed_points)) # 3-12 points
+                except ValueError: pass
+
+        outer_r = min(svg_width, svg_height) * 0.3
+        inner_r = outer_r * (0.382 if num_points == 5 else 0.5) # Golden ratio for 5-point star, 0.5 for others
+        
+        points_str = []
+        for i in range(num_points * 2):
+            radius = outer_r if i % 2 == 0 else inner_r
+            angle = (i / (num_points * 2)) * 2 * math.pi - (math.pi / 2) # Adjust to make a point go upwards
+            x_pt = center_x + radius * math.cos(angle)
+            y_pt = center_y + radius * math.sin(angle)
+            points_str.append(f"{x_pt:.2f},{y_pt:.2f}")
+        
+        svg_parts.append(f'''
+        <!-- Star -->
+        <polygon points="{" ".join(points_str)}" fill="{palette['primary']}" stroke="{palette['secondary']}" stroke-width="1.5"/>
+        ''')
+        if dominant_style == "fantasy" or "sparkle" in prompt_lower:
+            svg_parts.append(f'<polygon points="{" ".join(points_str)}" fill="none" stroke="{palette[\'accent\']}" stroke-width="3" filter="url(#glow)" opacity="0.5" transform="scale(0.95)" transform-origin="{center_x} {center_y}"/>')
+
+    # --- END SVG GENERATION FOR NEW OBJECTS ---
+
     # Abstract design (default if no specific object detected)
     else:
         # Different abstract styles based on dominant style
